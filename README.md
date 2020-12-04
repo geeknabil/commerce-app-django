@@ -1,6 +1,6 @@
 ﻿# commerce-app-django
 
-* An Ecommerce web app where users can register - see items - buy items - add comments - rate items and more
+* An Ecommerce web app where users can register - see items - buy items - sell items - add comments - rate items and more
 Usage:
 
 Follow these commands:
