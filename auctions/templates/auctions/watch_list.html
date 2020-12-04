@@ -1,0 +1,16 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    {% if watchlist_not_exist %}
+        <h3 class="text-danger text-center">Watchlist is empty please add new listings!</h3>
+        <h5 class="text-center"><a href="{% url 'index' %}">Back to listing page!</a></h5>
+    {% else %}
+        <h1>Listings in watchlist:</h1>
+        <ul>
+            {% for product in products %}
+                <a href="{% url 'product_page' product.id %}"><li>{{product.title}}</li></a>      
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+{% endblock %}

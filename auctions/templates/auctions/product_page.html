@@ -1,0 +1,121 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+    <h2 class="text-center">Listing details</h2>
+
+    {% if user.is_authenticated %}
+        {% if win %}
+            <h3 class="text-center text-info">Bid closed, Winner is {{winner_name}}, {{winner_bid}}$</h3>
+        {% endif %}
+    {% endif %}
+     
+    <div class='row'>
+        <div class='col-3'>
+            <img src="{{product.img}}" alt="{{product.title}}" width="100%" style="margin-bottom: 5px;">
+            {% if user.is_authenticated %}    
+                <div class="text-center">
+                    <form action="{% url 'product_page' product.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-primary" value="Add to Watching List">
+                        <input type="hidden" name="who_submit" id="bar" value="watchlist" />
+                    </form>
+                </div>        
+            {% endif %}
+                        
+            {% if product_exist %}
+                <h5 class="text-danger text-center">This product already exist in watchlist!</h5>
+            {% endif %}
+
+            {% if product_not_exist %}
+                <h5 class="text-info text-center">Product added to watchlist.</h5>
+            {% endif %}
+        </div>
+        
+        <div class='col-5'>
+            {% if user.is_authenticated %}
+                <div class="text-info top">
+                    {% if no_bids_found or bid_error %}
+                        <h4>No bids started yet, Start add new bid !!</h4>
+                    {% else %}        
+                        <h4>Highest bid is {{latest_bid_price}}$ made by {{latest_bid_username}}</h4>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <ul class="product-details">
+                <li>Title: {{ product.title }}</li>
+                <li>Description: {{ product.description }}</li>
+                <li>Starting_bid: {{product.starting_bid}}$</li>
+            </ul>
+            
+
+            {% if bid_error %}
+                <h5 class="text-danger">Error, Your Bid must be greater than starting bid {{product.starting_bid}}$</h5>
+            {% endif %}
+
+            {% if latest_bid_error %}
+                <h5 class="text-danger">Error, Your bid must be greater than the highest bid {{latest_bid_price}}$</h5>
+            {% endif %}
+            
+
+            {% if user.is_authenticated %}
+                <div class="text-left">
+                    <form action="{% url 'product_page' product.id %}" method="post">
+                        {% csrf_token %}
+                        {{bid_form}}
+                        <input type="hidden" name="who_submit" id="bar" value="bid" />
+                        <input type="submit" class="btn btn-dark" value="Submit Bid">
+                    </form>
+                </div>
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+                <div class="text-left" style="margin-top: 20px">
+                    <form action="{% url 'product_page' product.id %}" method="post">
+                        {% csrf_token %}
+                        {{comment_form}}
+                        <input type="hidden" name="who_submit" id="bar" value="comment" />
+                        <input type="submit" class="btn btn-dark" value="Submit Comment">
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-4">
+            {% if user.is_authenticated %}
+                <div class="text-right">
+                    <a href="{% url 'watchlist' %}"><input type="submit" class="btn btn-success" value="Go to Watchlist"></a>
+                </div>
+            
+                <form action="{% url 'product_page' product.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="text-right" style="padding-top: 5px;">
+                        <input type="submit" class="text-right btn-danger" value="Close Bidding">
+                    </div>
+                    <input type="hidden" name="who_submit" id="bar" value="close" />
+                    {% if closing_error %}
+                        <h6 class="text-right text-danger">Sorry, You are not the product creator! </h6>
+                    {% endif %}
+                </form>
+                
+            {% else %}
+                <div class="text-right">
+                    <a href="{% url 'login' %}"><input type="submit" class="btn btn-primary" value="Go to Watchlist"></a>
+                </div>
+            {% endif %}
+            
+            <div>
+                <h4>Comments</h4>
+                <ul>
+                    {% for comment in comments %}
+                        <li>{{comment.user.username}}: {{comment.comment}}</li>
+                    {% empty %}
+                        <h5 class="text-danger">No comments added!</h5>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

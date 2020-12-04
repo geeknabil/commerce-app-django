@@ -1,0 +1,30 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center">Add Listing</h1>
+        {% if user.is_authenticated %}
+            {% if error %}
+                <h5 class="text-center text-danger">{{error}}</h5>
+            {% endif %}
+            <form action="{% url 'create' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {% if error %}
+                        {{error_form}}
+                    {% else %}
+                        {{form}}
+                    {% endif %}
+                </div>
+
+                
+                <div class="form-group text-center">
+                    <input type="submit" class=" btn btn-primary" id="exampleFormControlInput1">
+                </div>
+
+            </form>
+        {% else %}
+            <h4 class="text-center text-danger">Please Login to create new listing!</h4>
+        {% endif %}
+    </div>
+{% endblock %}

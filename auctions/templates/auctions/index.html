@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2 class="text-center">Active Listings</h2>
+
+    <div class="container">
+        {% for product in products %}
+            <hr>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-2" style="border-right: 1px solid black;">
+                    <a href="{% url 'product_page' product.id %}"><img src="{{product.img}}" alt="{{product.title}}" width="100%"></a>    
+                </div>
+                <div class="col-10 left-border">
+                    <ul>
+                        <li>Title: {{product.title}}</li>
+                        <li>Description: {{product.description}}</li>
+                        <li>Price: {{product.starting_bid}}$</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}
